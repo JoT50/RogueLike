@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class AttackScript : MonoBehaviour
 {
@@ -11,18 +10,18 @@ public class AttackScript : MonoBehaviour
     public int attackDamage = 50;
     public LayerMask enemyLayers;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    public float attackInterval = 2.0f; // Co ile sekund ma odbywać się atak
+    private float timeSinceLastAttack = 0.0f; // Licznik czasu od ostatniego ataku
 
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Space)) 
+        timeSinceLastAttack += Time.deltaTime;
+
+        if (timeSinceLastAttack >= attackInterval)
         {
             Attack();
+            timeSinceLastAttack = 0.0f;
         }
     }
 
@@ -34,9 +33,14 @@ public class AttackScript : MonoBehaviour
 
         foreach (Collider2D enemy in hitEnemies)
         {
-            Debug.Log("We hit" + enemy.name);
+            Debug.Log("We hit " + enemy.name);
 
-            enemy.GetComponent<Enemy>().TakeDamage(attackDamage);
+            // Sprawdź, czy obiekt ma komponent Enemy, zanim spróbujesz wywołać metodę
+            Enemy enemyComponent = enemy.GetComponent<Enemy>();
+            if (enemyComponent != null)
+            {
+                enemyComponent.TakeDamage(attackDamage);
+            }
         }
     }
 
