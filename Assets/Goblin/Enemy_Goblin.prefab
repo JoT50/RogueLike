@@ -185,7 +185,7 @@ CapsuleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -206,3 +206,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PointPrefab: {fileID: 5335329736132701017, guid: 2c7fabc8875d83f4c8274d75d6309b2b, type: 3}
   maxHealth: 100
+  attackDamage: 10
+  attackRange: 1.5
+  attackCooldown: 2
+  player: {fileID: 0}

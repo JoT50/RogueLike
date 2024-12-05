@@ -14,6 +14,7 @@ public class PlayerMovementScript : MonoBehaviour
     void Start()
     {
         characterBody = GetComponent<Rigidbody2D>();
+        characterBody.freezeRotation = true;  // Zapewnia, że postać nie będzie się obracać
     }
 
     // Update is called once per frame

@@ -527,6 +527,7 @@ GameObject:
   - component: {fileID: 352045788}
   - component: {fileID: 352045787}
   - component: {fileID: 352045789}
+  - component: {fileID: 352045790}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -688,6 +689,21 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   attackInterval: 2
+--- !u!114 &352045790
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 352045783}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f5573e1093373248a8eb3f61b448d5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentLevel: 1
+  currentExp: 0
+  expToNextLevel: 20
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -796,7 +812,7 @@ Camera:
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 9.315114
+  orthographic size: 5.96875
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
