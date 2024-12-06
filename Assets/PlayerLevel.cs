@@ -67,7 +67,21 @@ public class PlayerLevel : MonoBehaviour
 
         Debug.Log($"Level Up! New level: {currentLevel}. Experience: {currentExp}/{expToNextLevel}");
 
-        // Notify GameManager to trigger event
-        GameManager.Instance.TriggerEvent();
+        // Notify GameManager to trigger event (show the event UI)
+        GameManager.Instance.TriggerEvent();  // To stop the game and show the event UI
+
+        // Wywołaj losowanie umiejętności po level upie
+        if (GameManager.Instance != null && GameManager.Instance.eventUI != null)
+        {
+            // Get the EventUIController instance and call ShowRandomSkills
+            EventUIController eventUIController = GameManager.Instance.eventUI.GetComponent<EventUIController>();
+            if (eventUIController != null)
+            {
+                eventUIController.ShowRandomSkills();  // Wywołujemy losowanie umiejętności
+            }
+        }
     }
+
+
+
 }

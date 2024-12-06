@@ -16,6 +16,8 @@ public class AttackScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (GameManager.Instance.isGamePaused) return; // Nie atakuj podczas pauzy
+
         timeSinceLastAttack += Time.deltaTime;
 
         if (timeSinceLastAttack >= attackInterval)
@@ -48,6 +50,20 @@ public class AttackScript : MonoBehaviour
     {
         if (attackPoint == null) return;
 
+        Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(attackPoint.position, attackRange);
+    }
+
+    // Metody do zwiększania obszaru ataku i zmniejszania odstępu między atakami
+    public void IncreaseAttackRange(float amount)
+    {
+        attackRange += amount;
+        Debug.Log($"Attack range increased to: {attackRange}");
+    }
+
+    public void DecreaseAttackInterval(float amount)
+    {
+        attackInterval = Mathf.Max(attackInterval - amount, 0.1f); // Minimum odstęp to 0.1 sekundy
+        Debug.Log($"Attack interval decreased to: {attackInterval}");
     }
 }
