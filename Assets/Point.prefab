@@ -102,14 +102,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1355520f85f8f504e9df7c25f1802bd4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentLevel: 1
-  currentExp: 0
-  expToNextLevel: 20
-  expIncreasePerLevel: 10
-  debugMode: 0
-  expValue: 10
-  attractionRange: 5
+  attractionRange: 0.5
   attractionSpeed: 2
+  collectDistance: 0.1
+  expValue: 10
+  yOffset: -0.5
 --- !u!58 &2295793308741483543
 CircleCollider2D:
   m_ObjectHideFlags: 0
