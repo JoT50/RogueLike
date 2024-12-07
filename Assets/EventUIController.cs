@@ -55,13 +55,13 @@ public class EventUIController : MonoBehaviour
         // Przypisujemy przyciski
         buttons = new Button[] { buttonOption1, buttonOption2, buttonOption3 };
 
-        // Opcjonalnie, pierwsze losowanie na start gry
-        ShowRandomSkills();
+        // Ukryj interfejs na starcie
+        gameObject.SetActive(false);
     }
 
     private void Update()
     {
-        // Nawigacja strzałkami (A i D) oraz wybór (spacja)
+        // Nawigacja klawiaturą (A i D) oraz wybór (Spacja)
         if (Input.GetKeyDown(KeyCode.A))
         {
             currentIndex = (currentIndex - 1 + buttons.Length) % buttons.Length;
@@ -77,23 +77,9 @@ public class EventUIController : MonoBehaviour
         {
             // Wywołaj akcję przypisaną do aktualnie wybranego przycisku
             buttons[currentIndex].onClick.Invoke();
-
-            // Po kliknięciu, zamknij interfejs i wznow grę
-            CloseEventUI();
         }
     }
 
-    private void UpdateButtonSelection()
-    {
-        foreach (Button button in buttons)
-        {
-            button.GetComponent<Image>().color = Color.white; // Domyślny kolor
-        }
-
-        buttons[currentIndex].GetComponent<Image>().color = Color.yellow; // Podświetlenie aktualnego przycisku
-    }
-
-    // Funkcja wywoływana przy level upie (po TriggerEvent z GameManagera)
     public void ShowRandomSkills()
     {
         // Wybieramy 3 losowe umiejętności z dostępnej listy
@@ -106,10 +92,14 @@ public class EventUIController : MonoBehaviour
             Action skill = selectedSkills[i];
 
             button.onClick.RemoveAllListeners(); // Usuń poprzednie listeners
-            button.onClick.AddListener(() => skill()); // Przypisz nową akcję
+            button.onClick.AddListener(() => 
+            {
+                skill();
+                CloseEventUI(); // Zamknięcie UI po kliknięciu
+            });
 
             // Wyświetl nazwę umiejętności na przycisku
-            TMP_Text buttonText = button.GetComponentInChildren<TMP_Text>(); // Pobierz TMP_Text
+            TMP_Text buttonText = button.GetComponentInChildren<TMP_Text>();
             if (buttonText != null)
             {
                 buttonText.text = skill.Method.Name; // Wyświetl nazwę metody
@@ -119,11 +109,26 @@ public class EventUIController : MonoBehaviour
                 Debug.LogError($"Button {button.name} has no TMP_Text component!");
             }
         }
+
+        // Ustaw pierwszy przycisk jako domyślny
+        currentIndex = 0;
+        UpdateButtonSelection();
     }
 
-    // Funkcja do losowania umiejętności
-    List<Action> GetRandomSkills(List<Action> allSkills, int count)
+    private void UpdateButtonSelection()
     {
+        // Aktualizuje podświetlenie przycisków
+        foreach (Button button in buttons)
+        {
+            button.GetComponent<Image>().color = Color.white; // Domyślny kolor
+        }
+
+        buttons[currentIndex].GetComponent<Image>().color = Color.yellow; // Podświetlenie aktualnego przycisku
+    }
+
+    private List<Action> GetRandomSkills(List<Action> allSkills, int count)
+    {
+        // Losuje `count` losowych umiejętności z dostępnej listy
         List<Action> selectedSkills = new List<Action>();
         System.Random rng = new System.Random();
         List<Action> shuffledSkills = new List<Action>(allSkills);
@@ -144,18 +149,16 @@ public class EventUIController : MonoBehaviour
     }
 
     // Umiejętności
-    void IncreaseSpeed() { playerMovement.speed += 1; Debug.Log("Increased player speed by 1!"); }
-    void IncreaseAttackDamage() { attackScript.attackDamage += 10; Debug.Log("Increased attack damage by 10!"); }
-    void IncreaseAttractionRange() { playerLevel.attractionRange += 1; Debug.Log($"Increased attraction range to: {playerLevel.attractionRange}"); }
-    void IncreaseAttackRange() { attackScript.attackRange += 0.1f; Debug.Log("Increased attack range by 0.1!"); }
-    void DecreaseAttackInterval() { attackScript.attackInterval = Mathf.Max(0.1f, attackScript.attackInterval - 0.2f); Debug.Log("Decreased attack interval!"); }
+    private void IncreaseSpeed() { playerMovement.speed += 1; Debug.Log("Increased player speed by 1!"); }
+    private void IncreaseAttackDamage() { attackScript.attackDamage += 10; Debug.Log("Increased attack damage by 10!"); }
+    private void IncreaseAttractionRange() { playerLevel.attractionRange += 1; Debug.Log($"Increased attraction range to: {playerLevel.attractionRange}"); }
+    private void IncreaseAttackRange() { attackScript.attackRange += 0.1f; Debug.Log("Increased attack range by 0.1!"); }
+    private void DecreaseAttackInterval() { attackScript.attackInterval = Mathf.Max(0.1f, attackScript.attackInterval - 0.2f); Debug.Log("Decreased attack interval!"); }
 
-    // Funkcja do zamykania interfejsu i wznowienia gry
-    void CloseEventUI()
+    private void CloseEventUI()
     {
-        // Zmieniamy stan gry na niezatrzymaną
+        // Zamykamy interfejs i wznawiamy grę
         GameManager.Instance.ResumeGame();
-        // Zamykamy interfejs
         gameObject.SetActive(false);
     }
 }

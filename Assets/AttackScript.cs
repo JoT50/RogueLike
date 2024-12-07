@@ -37,7 +37,6 @@ public class AttackScript : MonoBehaviour
         {
             Debug.Log("We hit " + enemy.name);
 
-            // Sprawdź, czy obiekt ma komponent Enemy, zanim spróbujesz wywołać metodę
             Enemy enemyComponent = enemy.GetComponent<Enemy>();
             if (enemyComponent != null)
             {
@@ -54,7 +53,6 @@ public class AttackScript : MonoBehaviour
         Gizmos.DrawWireSphere(attackPoint.position, attackRange);
     }
 
-    // Metody do zwiększania obszaru ataku i zmniejszania odstępu między atakami
     public void IncreaseAttackRange(float amount)
     {
         attackRange += amount;

@@ -5,15 +5,15 @@ public class PlayerHealth : MonoBehaviour
     public int maxHealth = 100;
     private int currentHealth;
 
-    void Start()
+    private void Start()
     {
-        currentHealth = maxHealth;
+        ResetHealth();
     }
 
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
-        Debug.Log($"Player takes {damage} damage. Current health: {currentHealth}");
+        Debug.Log($"Gracz otrzymał obrażenia: {damage}. Pozostałe zdrowie: {currentHealth}/{maxHealth}");
 
         if (currentHealth <= 0)
         {
@@ -21,9 +21,19 @@ public class PlayerHealth : MonoBehaviour
         }
     }
 
-    void Die()
+    private void Die()
     {
-        Debug.Log("Player died!");
-        // Dodaj logik� dla �mierci gracza (np. restart gry)
+        Debug.Log("Gracz zginął!");
+
+        if (GameManager.Instance != null)
+        {
+            GameManager.Instance.GameOver();
+        }
+    }
+
+    public void ResetHealth()
+    {
+        currentHealth = maxHealth;
+        Debug.Log($"Zdrowie gracza zresetowane: {currentHealth}/{maxHealth}");
     }
 }

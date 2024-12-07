@@ -1,15 +1,18 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager Instance { get; private set; } // Singleton
+    public static GameManager Instance;
 
-    public bool isGamePaused = false;  // Flaga informująca o zatrzymaniu gry
-    public GameObject eventUI;         // Interfejs wyświetlany w trakcie eventu
+    public GameObject eventUI; // Interfejs wyświetlany w trakcie eventu
+    public GameObject gameOverCanvas; // Interfejs wyświetlany po śmierci gracza
+    public Button resetButton; // Przycisk resetu w interfejsie Game Over
+    public bool isGamePaused = false; // Flaga informująca o zatrzymaniu gry
 
     private void Awake()
     {
-        // Singleton - tylko jedna instancja GameManagera
         if (Instance == null)
         {
             Instance = this;
@@ -19,37 +22,70 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-    }
 
-    private void Start()
-    {
-        // Upewnij się, że interfejs jest wyłączony na początku gry
-        if (eventUI != null)
+        // Wyłącz interfejs Game Over na starcie
+        if (gameOverCanvas != null)
         {
-            eventUI.SetActive(false);
+            gameOverCanvas.SetActive(false);
         }
     }
 
-    public void TriggerEvent()
+
+    public void GameOver()
     {
-        // Zatrzymaj grę
+        if (gameOverCanvas == null || resetButton == null)
+        {
+            Debug.LogError("Nie można wyświetlić Game Over: Brakuje referencji do gameOverCanvas lub resetButton!");
+            return;
+        }
+
         isGamePaused = true;
         Time.timeScale = 0;
 
-        // Wyświetl interfejs eventu
-        if (eventUI != null)
+        // Włącz interfejs Game Over
+        gameOverCanvas.SetActive(true);
+
+        // Przypisz listener do przycisku resetu
+        resetButton.onClick.RemoveAllListeners(); // Usuń poprzednie listenery
+        resetButton.onClick.AddListener(RestartGame);
+    }
+
+
+    public void RestartGame()
+    {
+        // Zresetuj stan gry
+        Time.timeScale = 1;
+        isGamePaused = false;
+
+        // Załaduj ponownie aktualną scenę
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+
+        // Ukryj interfejs Game Over
+        if (gameOverCanvas != null)
         {
-            eventUI.SetActive(true);
+            gameOverCanvas.SetActive(false);
         }
+    }
+
+
+    public void TriggerEvent()
+    {
+        if (eventUI == null)
+        {
+            Debug.LogError("Nie można uruchomić eventu: eventUI nie przypisane!");
+            return;
+        }
+
+        isGamePaused = true;
+        Time.timeScale = 0;
+        eventUI.SetActive(true);
     }
 
     public void ResumeGame()
     {
-        // Wznow grę
         isGamePaused = false;
         Time.timeScale = 1;
 
-        // Ukryj interfejs
         if (eventUI != null)
         {
             eventUI.SetActive(false);

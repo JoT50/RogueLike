@@ -8,48 +8,48 @@ public class Goblin_Movement_Script : MonoBehaviour
     private Transform player;
     private Animator animator;
 
-    // Start is called before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         goblinRigidbody = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
-
-        // Znajdź gracza za pomocą tagu "Player"
-        GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
-        if (playerObject != null)
-        {
-            player = playerObject.transform;
-        }
+        FindPlayer();
     }
 
-    // Update is called once per frame
     void Update()
     {
+        if (player == null)
+        {
+            FindPlayer();
+        }
+
         if (player != null)
         {
-            // Oblicz kierunek do gracza
             Vector2 direction = (player.position - transform.position).normalized;
-
-            // Przesuń goblina w stronę gracza
             goblinRigidbody.MovePosition(goblinRigidbody.position + direction * speed * Time.deltaTime);
 
-            // Ustaw animatora, aby uruchomił animację ruchu, gdy goblin się porusza
             animator.SetBool("isMoving", true);
 
-            // Obróć goblina w stronę gracza
             if (direction.x > 0)
             {
-                transform.localScale = new Vector3(1, 1, 1); // Przeciwnik patrzy w prawo
+                transform.localScale = new Vector3(1, 1, 1);
             }
             else if (direction.x < 0)
             {
-                transform.localScale = new Vector3(-1, 1, 1); // Przeciwnik patrzy w lewo
+                transform.localScale = new Vector3(-1, 1, 1);
             }
         }
         else
         {
-            // Jeśli nie ma gracza, zatrzymaj animację ruchu
             animator.SetBool("isMoving", false);
+        }
+    }
+
+    private void FindPlayer()
+    {
+        GameObject playerObject = GameObject.FindGameObjectWithTag("Player");
+        if (playerObject != null)
+        {
+            player = playerObject.transform;
         }
     }
 }
