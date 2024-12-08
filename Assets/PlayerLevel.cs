@@ -9,9 +9,24 @@ public class PlayerLevel : MonoBehaviour
     public int expIncreasePerLevel = 10;
 
     public float attractionRange = 5f;
-    public float attractionSpeed = 2f;
+    public float attractionSpeed = 3f;
     public float collectDistance = 0.5f;
     public float yOffset = -0.5f;
+
+    // Dźwięki
+    public AudioClip collectSound; // Dźwięk podnoszenia punktu
+    public AudioClip levelUpSound; // Dźwięk zdobycia poziomu
+    private AudioSource audioSource;
+
+    private void Start()
+    {
+        // Inicjalizacja AudioSource
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            Debug.LogError("Brak komponentu AudioSource na obiekcie gracza!");
+        }
+    }
 
     private void Update()
     {
@@ -43,7 +58,12 @@ public class PlayerLevel : MonoBehaviour
 
     private void CollectPoint(Point_script point)
     {
-        Debug.Log("Collected experience point!");
+        // Odtwórz dźwięk podnoszenia punktu
+        if (collectSound != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(collectSound);
+        }
+
         AddExp(point.expValue);
         Destroy(point.gameObject);
     }
@@ -67,8 +87,14 @@ public class PlayerLevel : MonoBehaviour
 
         Debug.Log($"Level Up! New level: {currentLevel}. Experience: {currentExp}/{expToNextLevel}");
 
+        // Odtwórz dźwięk zdobycia poziomu
+        if (levelUpSound != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(levelUpSound);
+        }
+
         // Notify GameManager to trigger event (show the event UI)
-        GameManager.Instance.TriggerEvent();  // To stop the game and show the event UI
+        GameManager.Instance.TriggerEvent(); // To stop the game and show the event UI
 
         // Wywołaj losowanie umiejętności po level upie
         if (GameManager.Instance != null && GameManager.Instance.eventUI != null)
@@ -77,11 +103,8 @@ public class PlayerLevel : MonoBehaviour
             EventUIController eventUIController = GameManager.Instance.eventUI.GetComponent<EventUIController>();
             if (eventUIController != null)
             {
-                eventUIController.ShowRandomSkills();  // Wywołujemy losowanie umiejętności
+                eventUIController.ShowRandomSkills(); // Wywołujemy losowanie umiejętności
             }
         }
     }
-
-
-
 }

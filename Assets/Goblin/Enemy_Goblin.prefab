@@ -153,7 +153,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb8c35973fc0bd84c9c782770b5b79cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 2
+  speed: 3
   destroyRadius: 5
 --- !u!70 &8183646893579392458
 CapsuleCollider2D:
@@ -205,8 +205,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PointPrefab: {fileID: 5335329736132701017, guid: 2c7fabc8875d83f4c8274d75d6309b2b, type: 3}
-  maxHealth: 100
-  attackDamage: 10
-  attackRange: 1.5
+  maxHealth: 40
+  attackDamage: 5
+  attackRange: 0.8
   attackCooldown: 2
   player: {fileID: 0}

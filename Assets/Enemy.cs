@@ -5,7 +5,7 @@ public class Enemy : MonoBehaviour
     public GameObject PointPrefab;
     public int maxHealth = 100;
     public int attackDamage = 10;
-    public float attackRange = 0.1f;
+    public float attackRange = 0.8f;
     public float attackCooldown = 2f;
     public Transform player;
 

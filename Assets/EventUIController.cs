@@ -149,9 +149,9 @@ public class EventUIController : MonoBehaviour
     }
 
     // Umiejętności
-    private void IncreaseSpeed() { playerMovement.speed += 1; Debug.Log("Increased player speed by 1!"); }
+    private void IncreaseSpeed() { playerMovement.speed += 0.5f; Debug.Log("Increased player speed by 0.5!"); }
     private void IncreaseAttackDamage() { attackScript.attackDamage += 10; Debug.Log("Increased attack damage by 10!"); }
-    private void IncreaseAttractionRange() { playerLevel.attractionRange += 1; Debug.Log($"Increased attraction range to: {playerLevel.attractionRange}"); }
+    private void IncreaseAttractionRange() { playerLevel.attractionRange += 0.2f; Debug.Log($"Increased attraction range to: {playerLevel.attractionRange}"); }
     private void IncreaseAttackRange() { attackScript.attackRange += 0.1f; Debug.Log("Increased attack range by 0.1!"); }
     private void DecreaseAttackInterval() { attackScript.attackInterval = Mathf.Max(0.1f, attackScript.attackInterval - 0.2f); Debug.Log("Decreased attack interval!"); }
 

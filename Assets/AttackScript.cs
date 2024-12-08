@@ -10,7 +10,7 @@ public class AttackScript : MonoBehaviour
     public int attackDamage = 50;
     public LayerMask enemyLayers;
 
-    public float attackInterval = 2.0f; // Co ile sekund ma odbywać się atak
+    public float attackInterval = 1.5f; // Co ile sekund ma odbywać się atak
     private float timeSinceLastAttack = 0.0f; // Licznik czasu od ostatniego ataku
 
     // Update is called once per frame
