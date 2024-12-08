@@ -11,10 +11,19 @@ public class Enemy : MonoBehaviour
 
     private int currentHealth;
     private float lastAttackTime = 0f;
+    private SpriteRenderer spriteRenderer;
+    private Color originalColor;
 
     void Start()
     {
         currentHealth = maxHealth;
+        spriteRenderer = GetComponent<SpriteRenderer>();
+
+        if (spriteRenderer != null)
+        {
+            originalColor = spriteRenderer.color;
+        }
+
         FindPlayer();
     }
 
@@ -63,9 +72,29 @@ public class Enemy : MonoBehaviour
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
+
+        FlashColor(Color.red, 0.2f); // Podświetl na czerwono
+
         if (currentHealth <= 0)
         {
             Die();
+        }
+    }
+
+    void FlashColor(Color flashColor, float duration)
+    {
+        if (spriteRenderer != null)
+        {
+            spriteRenderer.color = flashColor;
+            Invoke(nameof(ResetColor), duration);
+        }
+    }
+
+    void ResetColor()
+    {
+        if (spriteRenderer != null)
+        {
+            spriteRenderer.color = originalColor;
         }
     }
 

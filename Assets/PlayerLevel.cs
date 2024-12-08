@@ -9,7 +9,7 @@ public class PlayerLevel : MonoBehaviour
     public int expIncreasePerLevel = 10;
 
     public float attractionRange = 5f;
-    public float attractionSpeed = 3f;
+    public float attractionSpeed = 6f;
     public float collectDistance = 0.5f;
     public float yOffset = -0.5f;
 
