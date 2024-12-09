@@ -57,10 +57,17 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1;
         isGamePaused = false;
 
+        // Resetuj timer
+        TimerScript timer = FindObjectOfType<TimerScript>();
+        if (timer != null)
+        {
+            timer.ResetTimer();
+        }
+
         // Załaduj ponownie aktualną scenę
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 
-        // Po załadowaniu sceny zresetuj zdrowie gracza
+        // Po załadowaniu sceny zresetuj zdrowie gracza i poziom
         SceneManager.sceneLoaded += OnSceneLoaded;
 
         // Ukryj interfejs Game Over
@@ -68,6 +75,15 @@ public class GameManager : MonoBehaviour
         {
             gameOverCanvas.SetActive(false);
         }
+        
+        PlayerLevel playerLevel = FindObjectOfType<PlayerLevel>();
+        if (playerLevel != null)
+        {
+            playerLevel.currentLevel = 1; // Reset poziomu
+            playerLevel.currentExp = 0;  // Reset doświadczenia
+            playerLevel.expToNextLevel = 20; // Reset do wartości startowej
+        }
+
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -80,12 +96,27 @@ public class GameManager : MonoBehaviour
             playerHealth.ResetHealth();
         }
 
+        // Odśwież pasek poziomu
+        PlayerLevel playerLevel = FindObjectOfType<PlayerLevel>();
+        LevelBarController levelBar = FindObjectOfType<LevelBarController>();
+
+        if (playerLevel != null && levelBar != null)
+        {
+            // Upewnij się, że LevelBarController ma referencję do PlayerLevel
+            levelBar.levelSlider = FindObjectOfType<Slider>();
+            levelBar.levelText = FindObjectOfType<Text>();
+            levelBar.UpdateLevelBar();
+
+            // Podłącz ponownie PlayerLevel do LevelBarController
+            levelBar.playerLevel = playerLevel;
+
+            // Opcjonalnie zresetuj doświadczenie
+            playerLevel.currentExp = 0;
+        }
+
         // Odłącz listener, aby uniknąć wielokrotnych wywołań
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
-
-
-
 
     public void TriggerEvent()
     {

@@ -77,7 +77,15 @@ public class PlayerLevel : MonoBehaviour
         {
             LevelUp();
         }
+
+        // Zaktualizuj pasek poziomu
+        LevelBarController levelBar = FindObjectOfType<LevelBarController>();
+        if (levelBar != null)
+        {
+            levelBar.UpdateLevelBar();
+        }
     }
+
 
     private void LevelUp()
     {
