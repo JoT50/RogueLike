@@ -3,7 +3,8 @@ using UnityEngine;
 public class PlayerHealth : MonoBehaviour
 {
     public int maxHealth = 100;
-    private int currentHealth;
+    [SerializeField] private int currentHealth;
+    public HealthBar healthBar;
 
     public AudioClip gameOverSound; // Klip audio na koniec gry
     private AudioSource audioSource;
@@ -13,6 +14,8 @@ public class PlayerHealth : MonoBehaviour
 
     private void Start()
     {
+        healthBar.SetMaxHealth(maxHealth);
+        currentHealth = maxHealth;
         audioSource = GetComponent<AudioSource>();
         if (audioSource == null)
         {
@@ -34,8 +37,8 @@ public class PlayerHealth : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        currentHealth -= damage;
-
+        currentHealth = Mathf.Clamp(currentHealth - damage, 0, maxHealth);
+        healthBar.SetHealth(currentHealth);
         if (spriteRenderer != null)
         {
             FlashColor(Color.red, 0.2f); // Podświetl na biało
@@ -43,7 +46,7 @@ public class PlayerHealth : MonoBehaviour
 
         Debug.Log($"Gracz otrzymał obrażenia: {damage}. Pozostałe zdrowie: {currentHealth}/{maxHealth}");
 
-        if (currentHealth <= 0)
+        if (currentHealth == 0)
         {
             Die();
         }
@@ -84,6 +87,13 @@ public class PlayerHealth : MonoBehaviour
     public void ResetHealth()
     {
         currentHealth = maxHealth;
+        if (healthBar != null)
+        {
+            healthBar.SetMaxHealth(maxHealth); // Ustaw maksymalne zdrowie
+            healthBar.SetHealth(currentHealth); // Aktualizuj aktualne zdrowie
+        }
         Debug.Log($"Zdrowie gracza zresetowane: {currentHealth}/{maxHealth}");
     }
+
+
 }
