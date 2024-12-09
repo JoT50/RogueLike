@@ -60,12 +60,31 @@ public class GameManager : MonoBehaviour
         // Załaduj ponownie aktualną scenę
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 
+        // Po załadowaniu sceny zresetuj zdrowie gracza
+        SceneManager.sceneLoaded += OnSceneLoaded;
+
         // Ukryj interfejs Game Over
         if (gameOverCanvas != null)
         {
             gameOverCanvas.SetActive(false);
         }
     }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        // Odnajdź obiekt gracza i zresetuj jego zdrowie
+        PlayerHealth playerHealth = FindObjectOfType<PlayerHealth>();
+        if (playerHealth != null)
+        {
+            playerHealth.healthBar = FindObjectOfType<HealthBar>(); // Dynamiczne przypisanie
+            playerHealth.ResetHealth();
+        }
+
+        // Odłącz listener, aby uniknąć wielokrotnych wywołań
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+
 
 
     public void TriggerEvent()

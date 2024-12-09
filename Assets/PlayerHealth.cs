@@ -14,6 +14,12 @@ public class PlayerHealth : MonoBehaviour
 
     private void Start()
     {
+        // Szukaj HealthBar dynamicznie, jeśli nie jest przypisany
+        if (healthBar == null)
+        {
+            healthBar = FindObjectOfType<HealthBar>();
+        }
+
         healthBar.SetMaxHealth(maxHealth);
         currentHealth = maxHealth;
         audioSource = GetComponent<AudioSource>();
@@ -34,6 +40,7 @@ public class PlayerHealth : MonoBehaviour
 
         ResetHealth();
     }
+
 
     public void TakeDamage(int damage)
     {
