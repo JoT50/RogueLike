@@ -777,8 +777,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -178.12, y: -0.00002861}
-  m_SizeDelta: {x: 66.245, y: 58.1265}
+  m_AnchoredPosition: {x: -23, y: 54.063}
+  m_SizeDelta: {x: 165.3824, y: 58.1265}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &344923759
 MonoBehaviour:
@@ -951,7 +951,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14f5d7946ad16f44eab7e40ab9287ae2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 3
+  speed: 5
   animator: {fileID: 352045784}
 --- !u!50 &352045788
 Rigidbody2D:
@@ -1034,7 +1034,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5723918283e48c34dabc926e617bb685, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
+  maxHealth: 2147483647
   currentHealth: 100
   healthBar: {fileID: 1982846381}
   gameOverSound: {fileID: 8300000, guid: e6fe20ee32dbd8244a8cf55c1a1e420e, type: 3}
@@ -1525,7 +1525,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 232.80017, y: -242.64362}
+  m_AnchoredPosition: {x: 223, y: -242.64362}
   m_SizeDelta: {x: 300, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &715734201
@@ -2723,7 +2723,7 @@ MonoBehaviour:
   player: {fileID: 352045786}
   spawnRadius: 10
   spawnInterval: 1
-  maxEnemies: 70
+  maxEnemies: 200
 --- !u!4 &1589144031
 Transform:
   m_ObjectHideFlags: 0
