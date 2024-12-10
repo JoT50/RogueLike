@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &6923205224059491454
+--- !u!1 &3772535578453915239
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,42 +8,40 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 8297345938787498046}
-  - component: {fileID: 5400876785235160022}
-  - component: {fileID: 8123590817482303599}
-  - component: {fileID: 300039115802410612}
-  - component: {fileID: 7125715523984906144}
-  - component: {fileID: 8183646893579392458}
-  - component: {fileID: -4390822577613031685}
-  m_Layer: 6
-  m_Name: Enemy_Goblin
+  - component: {fileID: 8462565420435490560}
+  - component: {fileID: 3196467092110855552}
+  - component: {fileID: 351837796918725319}
+  - component: {fileID: 8861956966069747322}
+  - component: {fileID: 8817097889969115630}
+  m_Layer: 5
+  m_Name: Point50
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &8297345938787498046
+--- !u!4 &8462565420435490560
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6923205224059491454}
+  m_GameObject: {fileID: 3772535578453915239}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.8944643, y: 0.14910254, z: 0}
+  m_LocalPosition: {x: 6.4845815, y: -1.724282, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &5400876785235160022
+--- !u!212 &3196467092110855552
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6923205224059491454}
+  m_GameObject: {fileID: 3772535578453915239}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -81,87 +79,37 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 4944230376442633554, guid: 8a572638109d38b4bad3532bd9d5e8a8, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Sprite: {fileID: 7212092571461560906, guid: 4c7900764e9ca0a47b4eb5c895023e47, type: 3}
+  m_Color: {r: 0.9528302, g: 0, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 3.9473684, y: 3.9473684}
+  m_Size: {x: 0.06, y: 0.07}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!95 &8123590817482303599
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6923205224059491454}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: f1a1ef3ecb14c4940a661d66be8f8920, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
---- !u!50 &300039115802410612
-Rigidbody2D:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6923205224059491454}
-  m_BodyType: 0
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
-  m_GravityScale: 0
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 4
---- !u!114 &7125715523984906144
+--- !u!114 &351837796918725319
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6923205224059491454}
+  m_GameObject: {fileID: 3772535578453915239}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fb8c35973fc0bd84c9c782770b5b79cc, type: 3}
+  m_Script: {fileID: 11500000, guid: 1355520f85f8f504e9df7c25f1802bd4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 3
-  destroyRadius: 5
---- !u!70 &8183646893579392458
-CapsuleCollider2D:
+  expValue: 50
+--- !u!58 &8861956966069747322
+CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6923205224059491454}
+  m_GameObject: {fileID: 3772535578453915239}
   m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
@@ -185,28 +133,36 @@ CapsuleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.05922222, y: -0.14401197}
-  m_Size: {x: 0.3690405, y: 0.59241724}
-  m_Direction: 0
---- !u!114 &-4390822577613031685
-MonoBehaviour:
+  m_Offset: {x: 0, y: 0}
+  m_Radius: 0.109375
+--- !u!50 &8817097889969115630
+Rigidbody2D:
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6923205224059491454}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bbc71eafa7a51904593370d7ec8caaeb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  PointPrefab: {fileID: 5335329736132701017, guid: 2c7fabc8875d83f4c8274d75d6309b2b, type: 3}
-  maxHealth: 40
-  attackDamage: 5
-  attackRange: 0.8
-  attackCooldown: 2
-  player: {fileID: 0}
+  m_GameObject: {fileID: 3772535578453915239}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0

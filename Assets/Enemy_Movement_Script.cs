@@ -26,8 +26,8 @@ public class Goblin_Movement_Script : MonoBehaviour
         {
             Vector2 direction = (player.position - transform.position).normalized;
             goblinRigidbody.MovePosition(goblinRigidbody.position + direction * speed * Time.deltaTime);
-
-            animator.SetBool("isMoving", true);
+            
+            //animator.SetBool("isMoving", true);
 
             if (direction.x > 0)
             {
@@ -40,7 +40,7 @@ public class Goblin_Movement_Script : MonoBehaviour
         }
         else
         {
-            animator.SetBool("isMoving", false);
+            //animator.SetBool("isMoving", false);
         }
     }
 

@@ -2978,11 +2978,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65c13f5cf7a853640a22aeba22e80b9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  goblinPrefab: {fileID: 6923205224059491454, guid: 965770829ea372949832e72630c06dff, type: 3}
+  enemyTypes:
+  - name: Flying Eye
+    prefab: {fileID: 5138134804423791980, guid: 8067b6b271c02e7439d2caacd2e00e2d, type: 3}
+    maxEnemies: 40
+    spawnChance: 1.5
+  - name: Goblin
+    prefab: {fileID: 6923205224059491454, guid: 965770829ea372949832e72630c06dff, type: 3}
+    maxEnemies: 40
+    spawnChance: 1
+  - name: Mashroom
+    prefab: {fileID: 7950144540999027959, guid: 66dd8274fa5063c428827e38fe648b8d, type: 3}
+    maxEnemies: 10
+    spawnChance: 0.3
   player: {fileID: 352045786}
   spawnRadius: 10
   spawnInterval: 1
-  maxEnemies: 200
 --- !u!4 &1589144031
 Transform:
   m_ObjectHideFlags: 0

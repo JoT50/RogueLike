@@ -14,6 +14,7 @@ public class Enemy : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private Color originalColor;
 
+    
     void Start()
     {
         currentHealth = maxHealth;
