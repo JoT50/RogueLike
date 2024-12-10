@@ -16,6 +16,9 @@ public class GameManager : MonoBehaviour
     public bool isGamePaused = false; // Flaga informująca o zatrzymaniu gry
     private int totalPoints = 0; // Łączna liczba punktów
 
+    public AudioClip backgroundMusic; // Plik muzyczny
+    private AudioSource audioSource; // Komponent AudioSource
+
     private void Awake()
     {
         if (Instance == null)
@@ -28,6 +31,18 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
 
+        // Dodaj lub znajdź komponent AudioSource
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
+
+        // Konfiguracja AudioSource
+        audioSource.clip = backgroundMusic; // Przypisz utwór muzyczny
+        audioSource.loop = true; // Ustaw powtarzanie muzyki
+        audioSource.playOnAwake = false; // Nie odtwarzaj muzyki automatycznie
+
         if (gameOverCanvas != null)
         {
             gameOverCanvas.SetActive(false);
@@ -36,6 +51,14 @@ public class GameManager : MonoBehaviour
         if (victoryCanvas != null)
         {
             victoryCanvas.SetActive(false);
+        }
+    }
+
+    private void Start()
+    {
+        if (backgroundMusic != null && audioSource != null)
+        {
+            audioSource.Play(); // Rozpocznij odtwarzanie muzyki
         }
     }
 
@@ -204,6 +227,23 @@ public class GameManager : MonoBehaviour
         if (victoryPointsText != null)
         {
             victoryPointsText.text = $"{totalPoints}"; // Wyświetlanie tylko liczby punktów na ekranie zwycięstwa
+        }
+    }
+
+    // Metody sterowania muzyką w tle
+    public void PauseMusic()
+    {
+        if (audioSource != null && audioSource.isPlaying)
+        {
+            audioSource.Pause();
+        }
+    }
+
+    public void ResumeMusic()
+    {
+        if (audioSource != null && !audioSource.isPlaying)
+        {
+            audioSource.Play();
         }
     }
 }
