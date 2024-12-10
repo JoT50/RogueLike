@@ -61,6 +61,7 @@ public class PlayerLevel : MonoBehaviour
         }
 
         AddExp(point.expValue);
+        GameManager.Instance.UpdatePoints(point.expValue);
         Destroy(point.gameObject);
     }
 

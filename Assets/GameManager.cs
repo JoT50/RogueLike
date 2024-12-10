@@ -8,8 +8,13 @@ public class GameManager : MonoBehaviour
 
     public GameObject eventUI; // Interfejs wyświetlany w trakcie eventu
     public GameObject gameOverCanvas; // Interfejs wyświetlany po śmierci gracza
+    public GameObject victoryCanvas; // Interfejs wyświetlany po zwycięstwie
     public Button resetButton; // Przycisk resetu w interfejsie Game Over
+    public Button victoryResetButton; // Przycisk resetu w interfejsie Victory
+    public Text victoryPointsText; // Tekst wyświetlający punkty po zwycięstwie
+    public Text currentPointsText; // Tekst wyświetlający bieżące punkty
     public bool isGamePaused = false; // Flaga informująca o zatrzymaniu gry
+    private int totalPoints = 0; // Łączna liczba punktów
 
     private void Awake()
     {
@@ -26,6 +31,11 @@ public class GameManager : MonoBehaviour
         if (gameOverCanvas != null)
         {
             gameOverCanvas.SetActive(false);
+        }
+
+        if (victoryCanvas != null)
+        {
+            victoryCanvas.SetActive(false);
         }
     }
 
@@ -45,46 +55,61 @@ public class GameManager : MonoBehaviour
         resetButton.onClick.AddListener(RestartGame);
     }
 
+    public void GameVictory()
+    {
+        if (victoryCanvas == null || victoryPointsText == null || victoryResetButton == null)
+        {
+            Debug.LogError("Nie można wyświetlić Victory: Brakuje referencji do victoryCanvas, victoryPointsText lub victoryResetButton!");
+            return;
+        }
+
+        isGamePaused = true;
+        Time.timeScale = 0;
+
+        // Zaktualizuj punkty na ekranie zwycięstwa
+        UpdateVictoryPointsText();
+
+        victoryCanvas.SetActive(true);
+        victoryResetButton.onClick.RemoveAllListeners();
+        victoryResetButton.onClick.AddListener(RestartGame);
+    }
+
     public void RestartGame()
     {
         Time.timeScale = 1;
         isGamePaused = false;
 
+        // Reset timera
         TimerScript timer = FindObjectOfType<TimerScript>();
         if (timer != null)
         {
-            // Przypisz timerText na nowo
-            timer.timerText = GameObject.Find("TimerText")?.GetComponent<Text>();
-            if (timer.timerText == null)
-            {
-                Debug.LogError("TimerText not found! Make sure the object exists and has the correct name.");
-            }
-            else
-            {
-                Debug.Log("TimerText successfully assigned.");
-            }
             timer.ResetTimer();
         }
-        else
-        {
-            Debug.LogError("TimerScript not found in the scene.");
-        }
 
+        // Załaduj aktualną scenę
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 
-        SceneManager.sceneLoaded += OnSceneLoaded;
-
-        if (gameOverCanvas != null)
-        {
-            gameOverCanvas.SetActive(false);
-        }
-
+        // Reset doświadczenia i poziomu gracza
         PlayerLevel playerLevel = FindObjectOfType<PlayerLevel>();
         if (playerLevel != null)
         {
             playerLevel.currentLevel = 1;
             playerLevel.currentExp = 0;
             playerLevel.expToNextLevel = 20;
+        }
+
+        // Reset łącznej liczby punktów
+        totalPoints = 0;
+        UpdateCurrentPointsText(); // Zaktualizowanie wyświetlania punktów na ekranie
+
+        // Ukryj UI
+        if (gameOverCanvas != null)
+        {
+            gameOverCanvas.SetActive(false);
+        }
+        if (victoryCanvas != null)
+        {
+            victoryCanvas.SetActive(false);
         }
     }
 
@@ -121,7 +146,7 @@ public class GameManager : MonoBehaviour
             // Assign Level UI components more explicitly
             GameObject levelSliderObj = GameObject.Find("LevelSlider"); // Example: ensure slider has a unique name
             GameObject levelTextObj = GameObject.Find("LevelText");
-        
+
             if (levelSliderObj != null)
                 levelBar.levelSlider = levelSliderObj.GetComponent<Slider>();
 
@@ -135,7 +160,6 @@ public class GameManager : MonoBehaviour
 
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
-
 
     public void TriggerEvent()
     {
@@ -158,6 +182,28 @@ public class GameManager : MonoBehaviour
         if (eventUI != null)
         {
             eventUI.SetActive(false);
+        }
+    }
+
+    public void UpdatePoints(int points)
+    {
+        totalPoints += points;
+        UpdateCurrentPointsText(); // Zaktualizowanie tekstu po zdobyciu punktów
+    }
+
+    private void UpdateCurrentPointsText()
+    {
+        if (currentPointsText != null)
+        {
+            currentPointsText.text = $"{totalPoints}"; // Wyświetlanie tylko liczby punktów, bez tekstu
+        }
+    }
+
+    private void UpdateVictoryPointsText()
+    {
+        if (victoryPointsText != null)
+        {
+            victoryPointsText.text = $"{totalPoints}"; // Wyświetlanie tylko liczby punktów na ekranie zwycięstwa
         }
     }
 }
