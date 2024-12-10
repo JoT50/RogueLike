@@ -39,9 +39,9 @@ public class GameManager : MonoBehaviour
         }
 
         // Konfiguracja AudioSource
-        audioSource.clip = backgroundMusic; // Przypisz utwór muzyczny
-        audioSource.loop = true; // Ustaw powtarzanie muzyki
-        audioSource.playOnAwake = false; // Nie odtwarzaj muzyki automatycznie
+        audioSource.clip = backgroundMusic;
+        audioSource.loop = true;
+        audioSource.playOnAwake = false;
 
         if (gameOverCanvas != null)
         {
@@ -58,7 +58,7 @@ public class GameManager : MonoBehaviour
     {
         if (backgroundMusic != null && audioSource != null)
         {
-            audioSource.Play(); // Rozpocznij odtwarzanie muzyki
+            audioSource.Play();
         }
     }
 
@@ -74,7 +74,7 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 0;
 
         gameOverCanvas.SetActive(true);
-        resetButton.onClick.RemoveAllListeners(); // Usuń poprzednie listenery
+        resetButton.onClick.RemoveAllListeners();
         resetButton.onClick.AddListener(RestartGame);
     }
 
@@ -89,7 +89,6 @@ public class GameManager : MonoBehaviour
         isGamePaused = true;
         Time.timeScale = 0;
 
-        // Zaktualizuj punkty na ekranie zwycięstwa
         UpdateVictoryPointsText();
 
         victoryCanvas.SetActive(true);
@@ -102,17 +101,15 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1;
         isGamePaused = false;
 
-        // Reset timera
         TimerScript timer = FindObjectOfType<TimerScript>();
         if (timer != null)
         {
             timer.ResetTimer();
         }
 
-        // Załaduj aktualną scenę
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        SceneManager.sceneLoaded += OnSceneLoaded;
 
-        // Reset doświadczenia i poziomu gracza
         PlayerLevel playerLevel = FindObjectOfType<PlayerLevel>();
         if (playerLevel != null)
         {
@@ -121,11 +118,15 @@ public class GameManager : MonoBehaviour
             playerLevel.expToNextLevel = 20;
         }
 
-        // Reset łącznej liczby punktów
-        totalPoints = 0;
-        UpdateCurrentPointsText(); // Zaktualizowanie wyświetlania punktów na ekranie
+        PlayerHealth playerHealth = FindObjectOfType<PlayerHealth>();
+        if (playerHealth != null)
+        {
+            playerHealth.ResetHealth();
+        }
 
-        // Ukryj UI
+        totalPoints = 0;
+        UpdateCurrentPointsText();
+
         if (gameOverCanvas != null)
         {
             gameOverCanvas.SetActive(false);
@@ -141,12 +142,10 @@ public class GameManager : MonoBehaviour
         TimerScript timer = FindObjectOfType<TimerScript>();
         if (timer != null)
         {
-            // Use GameObject.Find to specifically locate TimerText
             GameObject timerTextObj = GameObject.Find("TimerText");
             if (timerTextObj != null)
             {
                 timer.timerText = timerTextObj.GetComponent<Text>();
-                Debug.Log("TimerText assigned successfully.");
             }
             else
             {
@@ -166,8 +165,7 @@ public class GameManager : MonoBehaviour
 
         if (playerLevel != null && levelBar != null)
         {
-            // Assign Level UI components more explicitly
-            GameObject levelSliderObj = GameObject.Find("LevelSlider"); // Example: ensure slider has a unique name
+            GameObject levelSliderObj = GameObject.Find("LevelSlider");
             GameObject levelTextObj = GameObject.Find("LevelText");
 
             if (levelSliderObj != null)
@@ -178,7 +176,6 @@ public class GameManager : MonoBehaviour
 
             levelBar.UpdateLevelBar();
             levelBar.playerLevel = playerLevel;
-            playerLevel.currentExp = 0;
         }
 
         SceneManager.sceneLoaded -= OnSceneLoaded;
@@ -211,14 +208,14 @@ public class GameManager : MonoBehaviour
     public void UpdatePoints(int points)
     {
         totalPoints += points;
-        UpdateCurrentPointsText(); // Zaktualizowanie tekstu po zdobyciu punktów
+        UpdateCurrentPointsText();
     }
 
     private void UpdateCurrentPointsText()
     {
         if (currentPointsText != null)
         {
-            currentPointsText.text = $"{totalPoints}"; // Wyświetlanie tylko liczby punktów, bez tekstu
+            currentPointsText.text = $"{totalPoints}";
         }
     }
 
@@ -226,11 +223,10 @@ public class GameManager : MonoBehaviour
     {
         if (victoryPointsText != null)
         {
-            victoryPointsText.text = $"{totalPoints}"; // Wyświetlanie tylko liczby punktów na ekranie zwycięstwa
+            victoryPointsText.text = $"{totalPoints}";
         }
     }
 
-    // Metody sterowania muzyką w tle
     public void PauseMusic()
     {
         if (audioSource != null && audioSource.isPlaying)
