@@ -1,2 +1,14 @@
 fileFormatVersion: 2
 guid: bbc71eafa7a51904593370d7ec8caaeb
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - PointPrefab: {instanceID: 0}
+  - player: {instanceID: 0}
+  - deathSound: {fileID: 8300000, guid: 158574a57404f9f46be5636c018e8242, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

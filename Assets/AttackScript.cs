@@ -13,6 +13,18 @@ public class AttackScript : MonoBehaviour
     public float attackInterval = 1.5f; // Co ile sekund ma odbywać się atak
     private float timeSinceLastAttack = 0.0f; // Licznik czasu od ostatniego ataku
 
+    public AudioClip[] attackSounds; // Tablica dźwięków ataku
+    private AudioSource audioSource; // Komponent AudioSource
+
+    void Start()
+    {
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            Debug.LogError("AudioSource component is missing!");
+        }
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -31,6 +43,9 @@ public class AttackScript : MonoBehaviour
     {
         animator.SetTrigger("Attack");
 
+        // Odtwarzanie losowego dźwięku
+        PlayRandomAttackSound();
+
         Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayers);
 
         foreach (Collider2D enemy in hitEnemies)
@@ -42,6 +57,15 @@ public class AttackScript : MonoBehaviour
             {
                 enemyComponent.TakeDamage(attackDamage);
             }
+        }
+    }
+
+    private void PlayRandomAttackSound()
+    {
+        if (attackSounds.Length > 0 && audioSource != null)
+        {
+            int randomIndex = UnityEngine.Random.Range(0, attackSounds.Length);
+            audioSource.PlayOneShot(attackSounds[randomIndex]);
         }
     }
 

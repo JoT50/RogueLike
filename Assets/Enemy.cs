@@ -9,12 +9,14 @@ public class Enemy : MonoBehaviour
     public float attackCooldown = 2f;
     public Transform player;
 
+    public AudioClip deathSound;    // Dźwięk na śmierć przeciwnika
+
     private int currentHealth;
     private float lastAttackTime = 0f;
     private SpriteRenderer spriteRenderer;
     private Color originalColor;
+    private AudioSource audioSource;
 
-    
     void Start()
     {
         currentHealth = maxHealth;
@@ -25,8 +27,16 @@ public class Enemy : MonoBehaviour
             originalColor = spriteRenderer.color;
         }
 
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            Debug.LogWarning("AudioSource component is missing on Enemy! Adding one automatically.");
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
+
         FindPlayer();
     }
+
 
     void Update()
     {
@@ -102,6 +112,10 @@ public class Enemy : MonoBehaviour
     void Die()
     {
         Debug.Log($"Enemy {gameObject.name} has died!");
+
+        // Odtwarzanie dźwięku śmierci
+        PlayDeathSound();
+
         Vector2 deathPosition = transform.position;
 
         if (PointPrefab != null)
@@ -110,5 +124,13 @@ public class Enemy : MonoBehaviour
         }
 
         Destroy(gameObject);
+    }
+
+    private void PlayDeathSound()
+    {
+        if (deathSound != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(deathSound);
+        }
     }
 }

@@ -7,8 +7,9 @@ public class PlayerHealth : MonoBehaviour
     public HealthBar healthBar;
 
     public AudioClip gameOverSound;
-    private AudioSource audioSource;
+    public AudioClip[] damageSounds; // Tablica dŸwiêków dla obra¿eñ
 
+    private AudioSource audioSource;
     private SpriteRenderer spriteRenderer;
     private Color originalColor;
 
@@ -42,6 +43,9 @@ public class PlayerHealth : MonoBehaviour
         currentHealth = Mathf.Clamp(currentHealth - damage, 0, maxHealth);
         healthBar.SetHealth(currentHealth);
 
+        // Losowe odtwarzanie dŸwiêku obra¿eñ
+        PlayRandomDamageSound();
+
         if (spriteRenderer != null)
         {
             FlashColor(Color.red, 0.2f);
@@ -50,6 +54,15 @@ public class PlayerHealth : MonoBehaviour
         if (currentHealth == 0)
         {
             Die();
+        }
+    }
+
+    private void PlayRandomDamageSound()
+    {
+        if (damageSounds != null && damageSounds.Length > 0 && audioSource != null)
+        {
+            int randomIndex = Random.Range(0, damageSounds.Length); // Wybierz losowy indeks
+            audioSource.PlayOneShot(damageSounds[randomIndex]); // Odtwórz losowy dŸwiêk
         }
     }
 

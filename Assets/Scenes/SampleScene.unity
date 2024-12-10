@@ -1153,6 +1153,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   attackInterval: 1.5
+  attackSounds:
+  - {fileID: 8300000, guid: a3c4b615e47c49a4ba0790545dfc2fe6, type: 3}
+  - {fileID: 8300000, guid: 91a9c17d991278849bf12f1cfe5a6ca0, type: 3}
+  - {fileID: 8300000, guid: ddf707853e844ba449fc088fcf6f99ce, type: 3}
 --- !u!114 &352045790
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1191,6 +1195,10 @@ MonoBehaviour:
   currentHealth: 100
   healthBar: {fileID: 1982846381}
   gameOverSound: {fileID: 8300000, guid: e6fe20ee32dbd8244a8cf55c1a1e420e, type: 3}
+  damageSounds:
+  - {fileID: 8300000, guid: 47633e44f511da644ad792cade81f525, type: 3}
+  - {fileID: 8300000, guid: b83d258812098634f8be14a576f2617d, type: 3}
+  - {fileID: 8300000, guid: 3cf2e290bb6787245af2cd392edf6f41, type: 3}
 --- !u!82 &352045792
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1471,7 +1479,7 @@ Camera:
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 11.25
+  orthographic size: 5.4
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
