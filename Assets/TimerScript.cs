@@ -18,6 +18,12 @@ public class TimerScript : MonoBehaviour
 
     private void UpdateTimerUI()
     {
+        if (timerText == null)
+        {
+            Debug.LogWarning("TimerText is null. Please assign it in the Inspector or dynamically.");
+            return;
+        }
+
         int minutes = Mathf.FloorToInt(timeElapsed / 60f);
         int seconds = Mathf.FloorToInt(timeElapsed % 60f);
         timerText.text = $"{minutes:00}:{seconds:00}";

@@ -6,7 +6,7 @@ public class PlayerHealth : MonoBehaviour
     [SerializeField] private int currentHealth;
     public HealthBar healthBar;
 
-    public AudioClip gameOverSound; // Klip audio na koniec gry
+    public AudioClip gameOverSound;
     private AudioSource audioSource;
 
     private SpriteRenderer spriteRenderer;
@@ -14,7 +14,6 @@ public class PlayerHealth : MonoBehaviour
 
     private void Start()
     {
-        // Szukaj HealthBar dynamicznie, jeśli nie jest przypisany
         if (healthBar == null)
         {
             healthBar = FindObjectOfType<HealthBar>();
@@ -22,6 +21,7 @@ public class PlayerHealth : MonoBehaviour
 
         healthBar.SetMaxHealth(maxHealth);
         currentHealth = maxHealth;
+
         audioSource = GetComponent<AudioSource>();
         if (audioSource == null)
         {
@@ -33,30 +33,38 @@ public class PlayerHealth : MonoBehaviour
         {
             originalColor = spriteRenderer.color;
         }
-        else
-        {
-            Debug.LogError("Brak komponentu SpriteRenderer na obiekcie gracza!");
-        }
 
         ResetHealth();
     }
-
 
     public void TakeDamage(int damage)
     {
         currentHealth = Mathf.Clamp(currentHealth - damage, 0, maxHealth);
         healthBar.SetHealth(currentHealth);
+
         if (spriteRenderer != null)
         {
-            FlashColor(Color.red, 0.2f); // Podświetl na biało
+            FlashColor(Color.red, 0.2f);
         }
-
-        Debug.Log($"Gracz otrzymał obrażenia: {damage}. Pozostałe zdrowie: {currentHealth}/{maxHealth}");
 
         if (currentHealth == 0)
         {
             Die();
         }
+    }
+
+    public void Heal(int amount)
+    {
+        currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
+        healthBar.SetHealth(currentHealth);
+    }
+
+    public void IncreaseMaxHealth(int amount)
+    {
+        maxHealth += amount;
+        currentHealth += amount;
+        healthBar.SetMaxHealth(maxHealth);
+        healthBar.SetHealth(currentHealth);
     }
 
     private void FlashColor(Color flashColor, float duration)
@@ -78,8 +86,6 @@ public class PlayerHealth : MonoBehaviour
 
     private void Die()
     {
-        Debug.Log("Gracz zginął!");
-
         if (gameOverSound != null)
         {
             audioSource.PlayOneShot(gameOverSound);
@@ -96,11 +102,8 @@ public class PlayerHealth : MonoBehaviour
         currentHealth = maxHealth;
         if (healthBar != null)
         {
-            healthBar.SetMaxHealth(maxHealth); // Ustaw maksymalne zdrowie
-            healthBar.SetHealth(currentHealth); // Aktualizuj aktualne zdrowie
+            healthBar.SetMaxHealth(maxHealth);
+            healthBar.SetHealth(currentHealth);
         }
-        Debug.Log($"Zdrowie gracza zresetowane: {currentHealth}/{maxHealth}");
     }
-
-
 }

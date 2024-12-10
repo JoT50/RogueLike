@@ -23,13 +23,11 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
 
-        // Wyłącz interfejs Game Over na starcie
         if (gameOverCanvas != null)
         {
             gameOverCanvas.SetActive(false);
         }
     }
-
 
     public void GameOver()
     {
@@ -42,81 +40,102 @@ public class GameManager : MonoBehaviour
         isGamePaused = true;
         Time.timeScale = 0;
 
-        // Włącz interfejs Game Over
         gameOverCanvas.SetActive(true);
-
-        // Przypisz listener do przycisku resetu
         resetButton.onClick.RemoveAllListeners(); // Usuń poprzednie listenery
         resetButton.onClick.AddListener(RestartGame);
     }
 
-
     public void RestartGame()
     {
-        // Zresetuj stan gry
         Time.timeScale = 1;
         isGamePaused = false;
 
-        // Resetuj timer
         TimerScript timer = FindObjectOfType<TimerScript>();
         if (timer != null)
         {
+            // Przypisz timerText na nowo
+            timer.timerText = GameObject.Find("TimerText")?.GetComponent<Text>();
+            if (timer.timerText == null)
+            {
+                Debug.LogError("TimerText not found! Make sure the object exists and has the correct name.");
+            }
+            else
+            {
+                Debug.Log("TimerText successfully assigned.");
+            }
             timer.ResetTimer();
         }
+        else
+        {
+            Debug.LogError("TimerScript not found in the scene.");
+        }
 
-        // Załaduj ponownie aktualną scenę
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 
-        // Po załadowaniu sceny zresetuj zdrowie gracza i poziom
         SceneManager.sceneLoaded += OnSceneLoaded;
 
-        // Ukryj interfejs Game Over
         if (gameOverCanvas != null)
         {
             gameOverCanvas.SetActive(false);
         }
-        
+
         PlayerLevel playerLevel = FindObjectOfType<PlayerLevel>();
         if (playerLevel != null)
         {
-            playerLevel.currentLevel = 1; // Reset poziomu
-            playerLevel.currentExp = 0;  // Reset doświadczenia
-            playerLevel.expToNextLevel = 20; // Reset do wartości startowej
+            playerLevel.currentLevel = 1;
+            playerLevel.currentExp = 0;
+            playerLevel.expToNextLevel = 20;
         }
-
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        // Odnajdź obiekt gracza i zresetuj jego zdrowie
+        TimerScript timer = FindObjectOfType<TimerScript>();
+        if (timer != null)
+        {
+            // Use GameObject.Find to specifically locate TimerText
+            GameObject timerTextObj = GameObject.Find("TimerText");
+            if (timerTextObj != null)
+            {
+                timer.timerText = timerTextObj.GetComponent<Text>();
+                Debug.Log("TimerText assigned successfully.");
+            }
+            else
+            {
+                Debug.LogError("TimerText not found after scene load! Check object name in the scene.");
+            }
+        }
+
         PlayerHealth playerHealth = FindObjectOfType<PlayerHealth>();
         if (playerHealth != null)
         {
-            playerHealth.healthBar = FindObjectOfType<HealthBar>(); // Dynamiczne przypisanie
+            playerHealth.healthBar = FindObjectOfType<HealthBar>();
             playerHealth.ResetHealth();
         }
 
-        // Odśwież pasek poziomu
         PlayerLevel playerLevel = FindObjectOfType<PlayerLevel>();
         LevelBarController levelBar = FindObjectOfType<LevelBarController>();
 
         if (playerLevel != null && levelBar != null)
         {
-            // Upewnij się, że LevelBarController ma referencję do PlayerLevel
-            levelBar.levelSlider = FindObjectOfType<Slider>();
-            levelBar.levelText = FindObjectOfType<Text>();
+            // Assign Level UI components more explicitly
+            GameObject levelSliderObj = GameObject.Find("LevelSlider"); // Example: ensure slider has a unique name
+            GameObject levelTextObj = GameObject.Find("LevelText");
+        
+            if (levelSliderObj != null)
+                levelBar.levelSlider = levelSliderObj.GetComponent<Slider>();
+
+            if (levelTextObj != null)
+                levelBar.levelText = levelTextObj.GetComponent<Text>();
+
             levelBar.UpdateLevelBar();
-
-            // Podłącz ponownie PlayerLevel do LevelBarController
             levelBar.playerLevel = playerLevel;
-
-            // Opcjonalnie zresetuj doświadczenie
             playerLevel.currentExp = 0;
         }
 
-        // Odłącz listener, aby uniknąć wielokrotnych wywołań
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
+
 
     public void TriggerEvent()
     {

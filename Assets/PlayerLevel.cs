@@ -6,7 +6,7 @@ public class PlayerLevel : MonoBehaviour
     public int currentLevel = 1;
     public int currentExp = 0;
     public int expToNextLevel = 20;
-    public int expIncreasePerLevel = 10;
+    public float expGrowthFactor = 1.5f; // Zwiększenie EXP potrzebnego o 50% na poziom
 
     public float attractionRange = 5f;
     public float attractionSpeed = 6f;
@@ -14,13 +14,12 @@ public class PlayerLevel : MonoBehaviour
     public float yOffset = -0.5f;
 
     // Dźwięki
-    public AudioClip collectSound; // Dźwięk podnoszenia punktu
-    public AudioClip levelUpSound; // Dźwięk zdobycia poziomu
+    public AudioClip collectSound;
+    public AudioClip levelUpSound;
     private AudioSource audioSource;
 
     private void Start()
     {
-        // Inicjalizacja AudioSource
         audioSource = GetComponent<AudioSource>();
         if (audioSource == null)
         {
@@ -40,7 +39,6 @@ public class PlayerLevel : MonoBehaviour
 
             if (distance <= attractionRange)
             {
-                // Attract the point
                 point.transform.position = Vector2.MoveTowards(
                     point.transform.position,
                     targetPosition,
@@ -50,7 +48,6 @@ public class PlayerLevel : MonoBehaviour
 
             if (distance <= collectDistance)
             {
-                // Collect the point
                 CollectPoint(point);
             }
         }
@@ -58,7 +55,6 @@ public class PlayerLevel : MonoBehaviour
 
     private void CollectPoint(Point_script point)
     {
-        // Odtwórz dźwięk podnoszenia punktu
         if (collectSound != null && audioSource != null)
         {
             audioSource.PlayOneShot(collectSound);
@@ -78,7 +74,6 @@ public class PlayerLevel : MonoBehaviour
             LevelUp();
         }
 
-        // Zaktualizuj pasek poziomu
         LevelBarController levelBar = FindObjectOfType<LevelBarController>();
         if (levelBar != null)
         {
@@ -86,32 +81,27 @@ public class PlayerLevel : MonoBehaviour
         }
     }
 
-
     private void LevelUp()
     {
         currentLevel++;
         currentExp -= expToNextLevel;
-        expToNextLevel += expIncreasePerLevel;
+        expToNextLevel = Mathf.CeilToInt(expToNextLevel * expGrowthFactor);
 
         Debug.Log($"Level Up! New level: {currentLevel}. Experience: {currentExp}/{expToNextLevel}");
 
-        // Odtwórz dźwięk zdobycia poziomu
         if (levelUpSound != null && audioSource != null)
         {
             audioSource.PlayOneShot(levelUpSound);
         }
 
-        // Notify GameManager to trigger event (show the event UI)
-        GameManager.Instance.TriggerEvent(); // To stop the game and show the event UI
+        GameManager.Instance.TriggerEvent();
 
-        // Wywołaj losowanie umiejętności po level upie
         if (GameManager.Instance != null && GameManager.Instance.eventUI != null)
         {
-            // Get the EventUIController instance and call ShowRandomSkills
             EventUIController eventUIController = GameManager.Instance.eventUI.GetComponent<EventUIController>();
             if (eventUIController != null)
             {
-                eventUIController.ShowRandomSkills(); // Wywołujemy losowanie umiejętności
+                eventUIController.ShowRandomSkills();
             }
         }
     }

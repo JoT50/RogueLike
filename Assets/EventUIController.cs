@@ -6,129 +6,158 @@ using System.Collections.Generic;
 
 public class EventUIController : MonoBehaviour
 {
-    // Referencje do przycisków
     public Button buttonOption1;
     public Button buttonOption2;
     public Button buttonOption3;
+    public Button healButton; // Przycisk do leczenia
 
-    // Referencje do komponentów gracza
     private PlayerMovementScript playerMovement;
     private AttackScript attackScript;
     private PlayerLevel playerLevel;
+    private PlayerHealth playerHealth;
 
-    private Button[] buttons;
-    private int currentIndex = 0;
+    private Button[] skillButtons;
+    private int currentSkillIndex = 0;
+    private bool isSkillSectionActive = true; // Kontroluje, czy jesteśmy w sekcji skilli, czy na przycisku leczenia
 
-    // Lista dostępnych umiejętności
     private List<Action> allSkills;
 
     private void Start()
     {
-        // Szukamy obiektu gracza
+        // Pobranie referencji do gracza
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         if (player != null)
         {
             playerMovement = player.GetComponent<PlayerMovementScript>();
             attackScript = player.GetComponent<AttackScript>();
             playerLevel = player.GetComponent<PlayerLevel>();
-
-            if (playerLevel == null)
-            {
-                Debug.LogError("PlayerLevel component not found on Player!");
-            }
-        }
-        else
-        {
-            Debug.LogError("Player object with tag 'Player' not found!");
+            playerHealth = player.GetComponent<PlayerHealth>();
         }
 
-        // Inicjalizujemy listę umiejętności
+        // Lista wszystkich możliwych skilli
         allSkills = new List<Action>
         {
             IncreaseSpeed,
             IncreaseAttackDamage,
             IncreaseAttractionRange,
             IncreaseAttackRange,
-            DecreaseAttackInterval
+            DecreaseAttackInterval,
+            IncreaseMaxHealth // Nowy skill zwiększający maksymalne zdrowie
         };
 
-        // Przypisujemy przyciski
-        buttons = new Button[] { buttonOption1, buttonOption2, buttonOption3 };
+        skillButtons = new Button[] { buttonOption1, buttonOption2, buttonOption3 };
 
-        // Ukryj interfejs na starcie
+        // Przycisk do leczenia (+50 HP)
+        healButton.onClick.AddListener(HealPlayer);
+
+        // Ustawienie UI jako nieaktywne na starcie gry
         gameObject.SetActive(false);
     }
 
     private void Update()
     {
-        // Nawigacja klawiaturą (A i D) oraz wybór (Spacja)
-        if (Input.GetKeyDown(KeyCode.A))
+        // Nawigacja klawiszami
+        if (isSkillSectionActive)
         {
-            currentIndex = (currentIndex - 1 + buttons.Length) % buttons.Length;
-            UpdateButtonSelection();
+            // Nawigacja między skillami (lewo-prawo)
+            if (Input.GetKeyDown(KeyCode.A))
+            {
+                currentSkillIndex = (currentSkillIndex - 1 + skillButtons.Length) % skillButtons.Length;
+                UpdateButtonSelection();
+            }
+            else if (Input.GetKeyDown(KeyCode.D))
+            {
+                currentSkillIndex = (currentSkillIndex + 1) % skillButtons.Length;
+                UpdateButtonSelection();
+            }
+
+            // Przejście do przycisku leczenia (dół)
+            if (Input.GetKeyDown(KeyCode.S))
+            {
+                isSkillSectionActive = false;
+                UpdateButtonSelection();
+            }
         }
-        else if (Input.GetKeyDown(KeyCode.D))
+        else
         {
-            currentIndex = (currentIndex + 1) % buttons.Length;
-            UpdateButtonSelection();
+            // Nawigacja: powrót na górę (sekcja skilli)
+            if (Input.GetKeyDown(KeyCode.W))
+            {
+                isSkillSectionActive = true;
+                UpdateButtonSelection();
+            }
+
+            // Kliknięcie przycisku leczenia
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                healButton.onClick.Invoke();
+            }
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        // Kliknięcie aktywnego przycisku (skill lub leczenie)
+        if (Input.GetKeyDown(KeyCode.Space) && isSkillSectionActive)
         {
-            // Wywołaj akcję przypisaną do aktualnie wybranego przycisku
-            buttons[currentIndex].onClick.Invoke();
+            skillButtons[currentSkillIndex].onClick.Invoke();
         }
     }
 
     public void ShowRandomSkills()
     {
-        // Wybieramy 3 losowe umiejętności z dostępnej listy
+        // Wybranie losowych skilli do wyświetlenia
         List<Action> selectedSkills = GetRandomSkills(allSkills, 3);
 
-        // Przypisujemy wybrane umiejętności do przycisków
-        for (int i = 0; i < buttons.Length; i++)
+        for (int i = 0; i < skillButtons.Length; i++)
         {
-            Button button = buttons[i];
+            Button button = skillButtons[i];
             Action skill = selectedSkills[i];
 
-            button.onClick.RemoveAllListeners(); // Usuń poprzednie listeners
-            button.onClick.AddListener(() => 
+            button.onClick.RemoveAllListeners();
+            button.onClick.AddListener(() =>
             {
                 skill();
-                CloseEventUI(); // Zamknięcie UI po kliknięciu
+                CloseEventUI();
             });
 
-            // Wyświetl nazwę umiejętności na przycisku
             TMP_Text buttonText = button.GetComponentInChildren<TMP_Text>();
             if (buttonText != null)
             {
-                buttonText.text = skill.Method.Name; // Wyświetl nazwę metody
-            }
-            else
-            {
-                Debug.LogError($"Button {button.name} has no TMP_Text component!");
+                buttonText.text = skill.Method.Name; // Nazwa skilla
             }
         }
 
-        // Ustaw pierwszy przycisk jako domyślny
-        currentIndex = 0;
+        // Reset nawigacji
+        currentSkillIndex = 0;
+        isSkillSectionActive = true;
         UpdateButtonSelection();
+
+        // Wyświetlenie UI
+        gameObject.SetActive(true);
     }
 
     private void UpdateButtonSelection()
     {
-        // Aktualizuje podświetlenie przycisków
-        foreach (Button button in buttons)
+        // Reset kolorów wszystkich przycisków
+        foreach (Button button in skillButtons)
         {
-            button.GetComponent<Image>().color = Color.white; // Domyślny kolor
+            button.GetComponent<Image>().color = Color.white;
         }
+        healButton.GetComponent<Image>().color = Color.white;
 
-        buttons[currentIndex].GetComponent<Image>().color = Color.yellow; // Podświetlenie aktualnego przycisku
+        if (isSkillSectionActive)
+        {
+            // Podświetlenie aktywnego przycisku w sekcji skilli
+            skillButtons[currentSkillIndex].GetComponent<Image>().color = Color.yellow;
+        }
+        else
+        {
+            // Podświetlenie przycisku leczenia
+            healButton.GetComponent<Image>().color = Color.yellow;
+        }
     }
 
     private List<Action> GetRandomSkills(List<Action> allSkills, int count)
     {
-        // Losuje `count` losowych umiejętności z dostępnej listy
+        // Losowanie unikalnych skilli
         List<Action> selectedSkills = new List<Action>();
         System.Random rng = new System.Random();
         List<Action> shuffledSkills = new List<Action>(allSkills);
@@ -148,7 +177,29 @@ public class EventUIController : MonoBehaviour
         return selectedSkills;
     }
 
-    // Umiejętności
+    // Funkcja leczenia (+50 HP)
+    private void HealPlayer()
+    {
+        if (playerHealth != null)
+        {
+            playerHealth.Heal(50);
+            Debug.Log("Player healed by 50 HP.");
+        }
+        CloseEventUI(); // Zamknięcie UI po leczeniu
+    }
+
+
+    // Skill: Zwiększenie maksymalnego zdrowia (+20 HP)
+    private void IncreaseMaxHealth()
+    {
+        if (playerHealth != null)
+        {
+            playerHealth.IncreaseMaxHealth(20);
+            Debug.Log("Player's max health increased by 20.");
+        }
+    }
+
+    // Inne skille (przykładowe)
     private void IncreaseSpeed() { playerMovement.speed += 0.5f; Debug.Log("Increased player speed by 0.5!"); }
     private void IncreaseAttackDamage() { attackScript.attackDamage += 10; Debug.Log("Increased attack damage by 10!"); }
     private void IncreaseAttractionRange() { playerLevel.attractionRange += 0.2f; Debug.Log($"Increased attraction range to: {playerLevel.attractionRange}"); }
@@ -157,7 +208,7 @@ public class EventUIController : MonoBehaviour
 
     private void CloseEventUI()
     {
-        // Zamykamy interfejs i wznawiamy grę
+        // Zamknięcie UI i wznowienie gry
         GameManager.Instance.ResumeGame();
         gameObject.SetActive(false);
     }
