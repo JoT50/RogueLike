@@ -992,9 +992,8 @@ GameObject:
   - component: {fileID: 352045789}
   - component: {fileID: 352045790}
   - component: {fileID: 352045791}
-  - component: {fileID: 352045792}
-  - component: {fileID: 352045794}
   - component: {fileID: 352045793}
+  - component: {fileID: 352045792}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -1312,27 +1311,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c68ee90e5d4a3e249b609bb9f2def2ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &352045794
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 352045783}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ba6bbbd5f0a8503459f86d07e88b7931, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  projectilePrefab: {fileID: 0}
-  firePoint: {fileID: 0}
-  fireInterval: 2
-  projectileSpeed: 10
-  projectileDamage: 20
-  enemyLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  detectionRange: 10
 --- !u!114 &352045795
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4089,19 +4067,21 @@ MonoBehaviour:
   enemyTypes:
   - name: Flying Eye
     prefab: {fileID: 5138134804423791980, guid: 8067b6b271c02e7439d2caacd2e00e2d, type: 3}
-    maxEnemies: 40
-    spawnChance: 8
+    maxEnemies: 60
+    minSpawnInterval: 0.1
+    maxSpawnInterval: 1
   - name: Goblin
     prefab: {fileID: 6923205224059491454, guid: 965770829ea372949832e72630c06dff, type: 3}
     maxEnemies: 40
-    spawnChance: 3
+    minSpawnInterval: 0.1
+    maxSpawnInterval: 2
   - name: Mashroom
     prefab: {fileID: 7950144540999027959, guid: 66dd8274fa5063c428827e38fe648b8d, type: 3}
     maxEnemies: 10
-    spawnChance: 1
+    minSpawnInterval: 0.5
+    maxSpawnInterval: 5
   player: {fileID: 352045786}
   spawnRadius: 10
-  spawnInterval: 1
 --- !u!4 &1589144031
 Transform:
   m_ObjectHideFlags: 0
