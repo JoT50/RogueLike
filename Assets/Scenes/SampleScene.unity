@@ -3276,7 +3276,7 @@ MonoBehaviour:
   m_RefResolutionX: 1920
   m_RefResolutionY: 1080
   m_CropFrame: 0
-  m_GridSnapping: 1
+  m_GridSnapping: 0
   m_FilterMode: 0
   m_UpscaleRT: 0
   m_PixelSnapping: 0
@@ -3307,7 +3307,7 @@ MonoBehaviour:
     DefaultMode: 2
   DefaultBlend:
     Style: 1
-    Time: 2
+    Time: 0
     CustomCurve:
       serializedVersion: 2
       m_Curve: []
@@ -11461,17 +11461,17 @@ MonoBehaviour:
   enemyTypes:
   - name: Flying Eye
     prefab: {fileID: 5138134804423791980, guid: 8067b6b271c02e7439d2caacd2e00e2d, type: 3}
-    maxEnemies: 60
+    maxEnemies: 0
     minSpawnInterval: 0.1
     maxSpawnInterval: 1
   - name: Goblin
     prefab: {fileID: 6923205224059491454, guid: 965770829ea372949832e72630c06dff, type: 3}
-    maxEnemies: 40
+    maxEnemies: 0
     minSpawnInterval: 0.1
     maxSpawnInterval: 2
   - name: Mashroom
     prefab: {fileID: 7950144540999027959, guid: 66dd8274fa5063c428827e38fe648b8d, type: 3}
-    maxEnemies: 10
+    maxEnemies: 0
     minSpawnInterval: 0.5
     maxSpawnInterval: 5
   player: {fileID: 352045786}

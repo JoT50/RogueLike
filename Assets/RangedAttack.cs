@@ -14,6 +14,8 @@ public class PlayerRangedAttack : MonoBehaviour
 
     void Start()
     {
+        this.enabled = false;
+        
         // Sprawdź, czy firePoint został przypisany
         if (firePoint == null)
         {

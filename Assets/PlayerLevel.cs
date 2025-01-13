@@ -18,6 +18,12 @@ public class PlayerLevel : MonoBehaviour
     public AudioClip levelUpSound;
     private AudioSource audioSource;
 
+    // Poziom odblokowania ataku dystansowego
+    public int rangedAttackUnlockLevel = 3;
+
+    // Odniesienie do skryptu ataku dystansowego
+    public PlayerRangedAttack rangedAttack;
+
     private void Start()
     {
         audioSource = GetComponent<AudioSource>();
@@ -25,12 +31,22 @@ public class PlayerLevel : MonoBehaviour
         {
             Debug.LogError("Brak komponentu AudioSource na obiekcie gracza!");
         }
+
+        // Sprawdź, czy skrypt ataku dystansowego jest przypisany; jeśli nie, spróbuj go znaleźć
+        if (rangedAttack == null)
+        {
+            rangedAttack = GetComponent<PlayerRangedAttack>();
+            if (rangedAttack == null)
+            {
+                Debug.LogError("Brak przypisanego skryptu PlayerRangedAttack!");
+            }
+        }
     }
 
     private void Update()
     {
-        // Find all points in the scene
-        Point_script[] points = FindObjectsByType<Point_script>(FindObjectsSortMode.None);
+        // Znajdź wszystkie punkty w scenie
+        Point_script[] points = FindObjectsOfType<Point_script>();
 
         foreach (Point_script point in points)
         {
@@ -68,7 +84,7 @@ public class PlayerLevel : MonoBehaviour
     public void AddExp(int amount)
     {
         currentExp += amount;
-        Debug.Log($"Added experience: {amount}. Current experience: {currentExp}/{expToNextLevel}");
+        Debug.Log($"Dodano doświadczenie: {amount}. Aktualne doświadczenie: {currentExp}/{expToNextLevel}");
 
         while (currentExp >= expToNextLevel)
         {
@@ -88,7 +104,7 @@ public class PlayerLevel : MonoBehaviour
         currentExp -= expToNextLevel;
         expToNextLevel = Mathf.CeilToInt(expToNextLevel * expGrowthFactor);
 
-        Debug.Log($"Level Up! New level: {currentLevel}. Experience: {currentExp}/{expToNextLevel}");
+        Debug.Log($"Awans! Nowy poziom: {currentLevel}. Doświadczenie: {currentExp}/{expToNextLevel}");
 
         if (levelUpSound != null && audioSource != null)
         {
@@ -104,6 +120,13 @@ public class PlayerLevel : MonoBehaviour
             {
                 eventUIController.ShowRandomSkills();
             }
+        }
+
+        // Włącz skrypt ataku dystansowego na określonym poziomie
+        if (currentLevel >= rangedAttackUnlockLevel && rangedAttack != null && !rangedAttack.enabled)
+        {
+            rangedAttack.enabled = true;
+            Debug.Log("Atak dystansowy odblokowany!");
         }
     }
 }
