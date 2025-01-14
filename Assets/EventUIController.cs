@@ -121,7 +121,11 @@ public class EventUIController : MonoBehaviour
             TMP_Text buttonText = button.GetComponentInChildren<TMP_Text>();
             if (buttonText != null)
             {
-                buttonText.text = skill.Method.Name; // Nazwa skilla
+                // Formatowanie nazwy skilla
+                string skillName = FormatSkillName(skill.Method.Name);
+                string skillEffect = GetSkillEffect(skill.Method.Name);
+
+                buttonText.text = $"{skillName}\n\n<size=14>{skillEffect}</size>";
             }
         }
 
@@ -177,7 +181,34 @@ public class EventUIController : MonoBehaviour
         return selectedSkills;
     }
 
-    // Funkcja leczenia (+50 HP)
+    private string FormatSkillName(string methodName)
+    {
+        // Rozdzielenie na słowa, każde słowo w nowej linii
+        return string.Join("\n", SplitCamelCase(methodName));
+    }
+
+    private string[] SplitCamelCase(string input)
+    {
+        // Rozdzielenie camel case na osobne słowa
+        return System.Text.RegularExpressions.Regex
+            .Split(input, @"(?<!^)(?=[A-Z])");
+    }
+
+    private string GetSkillEffect(string methodName)
+    {
+        // Zwrócenie efektu skilla na podstawie nazwy metody
+        return methodName switch
+        {
+            nameof(IncreaseSpeed) => "+0.5 speed",
+            nameof(IncreaseAttackDamage) => "+10 dmg",
+            nameof(IncreaseAttractionRange) => "+0.2 range",
+            nameof(IncreaseAttackRange) => "+0.1 range",
+            nameof(DecreaseAttackInterval) => "-0.2 interval",
+            nameof(IncreaseMaxHealth) => "+20 max health",
+            _ => "Unknown effect"
+        };
+    }
+
     private void HealPlayer()
     {
         if (playerHealth != null)
@@ -188,8 +219,6 @@ public class EventUIController : MonoBehaviour
         CloseEventUI(); // Zamknięcie UI po leczeniu
     }
 
-
-    // Skill: Zwiększenie maksymalnego zdrowia (+20 HP)
     private void IncreaseMaxHealth()
     {
         if (playerHealth != null)
@@ -199,7 +228,6 @@ public class EventUIController : MonoBehaviour
         }
     }
 
-    // Inne skille (przykładowe)
     private void IncreaseSpeed() { playerMovement.speed += 0.5f; Debug.Log("Increased player speed by 0.5!"); }
     private void IncreaseAttackDamage() { attackScript.attackDamage += 10; Debug.Log("Increased attack damage by 10!"); }
     private void IncreaseAttractionRange() { playerLevel.attractionRange += 0.2f; Debug.Log($"Increased attraction range to: {playerLevel.attractionRange}"); }
