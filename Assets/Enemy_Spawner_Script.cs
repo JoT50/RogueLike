@@ -11,19 +11,20 @@ public class EnemyType
     public float maxSpawnInterval = 10f; // Maksymalny czas spawnów
 }
 
+
 public class Enemy_Spawner_Script : MonoBehaviour
 {
-    public List<EnemyType> enemyTypes;  // Lista typów wrogów
-    public Transform player;           // Transform gracza
-    public float spawnRadius = 10f;    // Minimalna odległość spawnów od gracza
+    public List<EnemyType> enemyTypes;
+    public Transform player;
+    public float spawnRadius = 10f;
+    public float despawnRadius = 20f;
 
-    private List<GameObject> enemies = new List<GameObject>(); // Lista aktywnych przeciwników
-    private Dictionary<EnemyType, int> spawnedCount = new Dictionary<EnemyType, int>(); // Liczba spawnów dla każdego typu
-    private Dictionary<EnemyType, float> spawnTimers = new Dictionary<EnemyType, float>(); // Timery spawnów dla każdego typu
+    private List<GameObject> enemies = new List<GameObject>();
+    private Dictionary<EnemyType, int> spawnedCount = new Dictionary<EnemyType, int>();
+    private Dictionary<EnemyType, float> spawnTimers = new Dictionary<EnemyType, float>();
 
     void Start()
     {
-        // Inicjalizacja liczników i timerów dla każdego typu wroga
         foreach (var enemyType in enemyTypes)
         {
             spawnedCount[enemyType] = 0;
@@ -35,25 +36,27 @@ public class Enemy_Spawner_Script : MonoBehaviour
     {
         float deltaTime = Time.deltaTime;
 
-        // Usuwaj przeciwników, którzy zostali zniszczeni
-        enemies.RemoveAll(enemy => enemy == null);
-
-        // Zmniejsz licznik, jeśli przeciwnik został zniszczony
-        foreach (var type in enemyTypes)
+        // Usuwanie przeciwników poza strefą despawn
+        enemies.RemoveAll(enemy =>
         {
-            spawnedCount[type] = enemies.FindAll(e => e != null && e.name.Contains(type.prefab.name)).Count;
-        }
+            if (enemy == null || IsOutsideDespawnRadius(enemy))
+            {
+                DecreaseSpawnCount(enemy);
+                Destroy(enemy);
+                return true;
+            }
+            return false;
+        });
 
-        // Aktualizuj timery i spawnuj przeciwników, gdy czas minie
+        // Aktualizacja timerów i spawnowanie
         foreach (var type in enemyTypes)
         {
             spawnTimers[type] += deltaTime;
 
-            float currentInterval = CalculateSpawnInterval(type);
-            if (spawnTimers[type] >= currentInterval)
+            if (spawnTimers[type] >= CalculateSpawnInterval(type))
             {
                 SpawnEnemy(type);
-                spawnTimers[type] = 0f; // Reset timera
+                spawnTimers[type] = 0f;
             }
         }
     }
@@ -61,24 +64,19 @@ public class Enemy_Spawner_Script : MonoBehaviour
     float CalculateSpawnInterval(EnemyType type)
     {
         int currentCount = spawnedCount[type];
-        float t = (float)currentCount / type.maxEnemies; // Normalizacja od 0 do 1
-        return Mathf.Lerp(type.minSpawnInterval, type.maxSpawnInterval, t); // Interpolacja czasu spawnów
+        float t = (float)currentCount / type.maxEnemies;
+        return Mathf.Lerp(type.minSpawnInterval, type.maxSpawnInterval, t);
     }
 
     void SpawnEnemy(EnemyType type)
     {
-        // Sprawdź, czy liczba przeciwników osiągnęła limit
         if (spawnedCount[type] >= type.maxEnemies) return;
 
-        // Wylosuj punkt poza obszarem widzenia gracza
         Vector2 spawnPosition = GetSpawnPosition();
-
-        // Stwórz przeciwnika i dodaj go do listy
         GameObject newEnemy = Instantiate(type.prefab, spawnPosition, Quaternion.identity);
-        newEnemy.name = type.prefab.name; // Ustaw nazwę wroga
-        enemies.Add(newEnemy);
+        newEnemy.name = type.prefab.name;
 
-        // Zwiększ licznik przeciwników tego typu
+        enemies.Add(newEnemy);
         spawnedCount[type]++;
     }
 
@@ -89,12 +87,27 @@ public class Enemy_Spawner_Script : MonoBehaviour
 
         do
         {
-            // Wylosuj punkt wokół gracza w promieniu spawnRadius
             float angle = Random.Range(0, 2 * Mathf.PI);
-            float spawnDistance = spawnRadius;
-            spawnPosition = playerPosition + new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * spawnDistance;
+            spawnPosition = playerPosition + new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * spawnRadius;
         } while (Vector2.Distance(spawnPosition, playerPosition) < spawnRadius);
 
         return spawnPosition;
+    }
+
+    bool IsOutsideDespawnRadius(GameObject enemy)
+    {
+        return Vector2.Distance(player.position, enemy.transform.position) > despawnRadius;
+    }
+
+    void DecreaseSpawnCount(GameObject enemy)
+    {
+        foreach (var type in enemyTypes)
+        {
+            if (enemy != null && enemy.name.Contains(type.prefab.name))
+            {
+                spawnedCount[type]--;
+                break;
+            }
+        }
     }
 }

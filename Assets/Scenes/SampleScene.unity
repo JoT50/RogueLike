@@ -4975,6 +4975,7 @@ MonoBehaviour:
     maxSpawnInterval: 5
   player: {fileID: 352045786}
   spawnRadius: 10
+  despawnRadius: 12
 --- !u!4 &1589144031
 Transform:
   m_ObjectHideFlags: 0
