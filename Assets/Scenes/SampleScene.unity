@@ -1993,7 +1993,7 @@ Camera:
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 11.25
+  orthographic size: 7.2
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -4961,17 +4961,17 @@ MonoBehaviour:
   - name: Flying Eye
     prefab: {fileID: 5138134804423791980, guid: 8067b6b271c02e7439d2caacd2e00e2d, type: 3}
     maxEnemies: 60
-    minSpawnInterval: 0.1
+    minSpawnInterval: 0.2
     maxSpawnInterval: 1
   - name: Goblin
     prefab: {fileID: 6923205224059491454, guid: 965770829ea372949832e72630c06dff, type: 3}
     maxEnemies: 40
-    minSpawnInterval: 0.1
+    minSpawnInterval: 0.2
     maxSpawnInterval: 2
   - name: Mashroom
     prefab: {fileID: 7950144540999027959, guid: 66dd8274fa5063c428827e38fe648b8d, type: 3}
     maxEnemies: 10
-    minSpawnInterval: 0.5
+    minSpawnInterval: 0.7
     maxSpawnInterval: 5
   player: {fileID: 352045786}
   spawnRadius: 10
